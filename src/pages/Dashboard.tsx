@@ -454,15 +454,15 @@ export default function Dashboard() {
         <Link 
           to={isEditMode ? '#' : "/execution"} 
           onClick={(e) => isEditMode && e.preventDefault()}
-          className="metro-tile-wide plastic-effect p-6 flex flex-col justify-between group border-neon-green/50 bg-neon-green/5"
+          className="metro-tile-wide plastic-effect p-6 flex flex-col justify-between group border-neon-green/50 bg-neon-green/5 text-white"
         >
           <div className="flex justify-between items-start">
             <Play size={48} className="text-neon-green group-hover:scale-110 transition-transform neon-glow" fill="currentColor" />
             <span className="text-xs font-black uppercase tracking-[0.2em] text-neon-green opacity-60 animate-pulse">Live Now</span>
           </div>
           <div>
-            <span className="text-2xl font-black text-black uppercase tracking-tighter">Central de Execução</span>
-            <p className="text-xs text-gray-500 mt-1 uppercase tracking-widest">Acompanhamento em Tempo Real</p>
+            <span className="text-2xl font-black text-white uppercase tracking-tighter">Central de Execução</span>
+            <p className="text-xs text-white/70 mt-1 uppercase tracking-widest">Acompanhamento em Tempo Real</p>
           </div>
         </Link>
       )
