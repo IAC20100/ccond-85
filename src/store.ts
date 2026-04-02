@@ -94,6 +94,7 @@ export const useStore = create<AppState>()(
     fetchInitialData: async () => {
       if (!isSupabaseConfigured) {
         console.warn('Supabase não configurado. Usando dados locais.');
+        toast.error('Supabase não configurado. Verifique as variáveis de ambiente no Vercel (VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY).', { duration: 6000 });
         set({ isLoading: false });
         return;
       }
@@ -849,6 +850,7 @@ export const useStore = create<AppState>()(
       
       login: (user, pass) => {
         if (user === 'iac' && pass === 'iac2010') {
+          localStorage.setItem('isAuthenticated', 'true');
           set({ isAuthenticated: true });
           // Ao fazer login, busca os dados do Supabase
           get().fetchInitialData();
@@ -857,6 +859,7 @@ export const useStore = create<AppState>()(
         return false;
       },
       logout: () => {
+        localStorage.removeItem('isAuthenticated');
         set({ isAuthenticated: false });
       },
       
@@ -867,7 +870,10 @@ export const useStore = create<AppState>()(
         // 1. Atualiza o estado local imediatamente (Optimistic Update)
         set((state) => ({ clients: [...state.clients, newClient] }));
 
-        if (!isSupabaseConfigured) return;
+        if (!isSupabaseConfigured) {
+          toast.error('Supabase não configurado. Os dados serão perdidos ao atualizar a página.');
+          return;
+        }
 
         // 2. Tenta persistir no Supabase
         try {
@@ -894,18 +900,16 @@ export const useStore = create<AppState>()(
           if (error) {
             console.error('Erro ao persistir no Supabase:', error);
             if (error.code === '42P01') {
-              toast.error('Tabela "clients" não encontrada. Você executou o script SQL no Supabase?');
-            } else if (error.message === 'Failed to fetch') {
-              toast.error('Erro de conexão com o Supabase. Verifique se a URL do projeto está correta e se o projeto não está pausado.');
+              toast.error('Tabela "clients" não encontrada no Supabase.');
             } else {
               toast.error(`Erro ao salvar no Supabase: ${error.message}`);
             }
           } else {
-            toast.success('Cliente salvo no Supabase com sucesso!');
+            toast.success('Cliente salvo no Supabase!');
           }
         } catch (error: any) {
           console.error('Erro de conexão com Supabase:', error);
-          toast.error('Erro de conexão com Supabase. Verifique suas chaves.');
+          toast.error('Erro de conexão com Supabase.');
         }
       },
 
@@ -2660,7 +2664,12 @@ export const useStore = create<AppState>()(
         const id = uuidv4();
         const newSale: Sale = { ...sale, id };
         set((state) => ({ sales: [...state.sales, newSale] }));
-        if (!isSupabaseConfigured) return;
+        
+        if (!isSupabaseConfigured) {
+          toast.error('Supabase não configurado. Os dados serão perdidos ao atualizar a página.');
+          return;
+        }
+
         try {
           const { error } = await supabase.from('sales').insert([{
             id,
@@ -2673,10 +2682,14 @@ export const useStore = create<AppState>()(
             notes: sale.notes
           }]);
           if (error) throw error;
-          toast.success('Venda/Proposta registrada!');
-        } catch (e) {
+          toast.success('Venda/Proposta registrada no Supabase!');
+        } catch (e: any) {
           console.error(e);
-          toast.error('Erro ao salvar venda');
+          if (e.code === '42P01') {
+            toast.error('Tabela "sales" não encontrada no Supabase.');
+          } else {
+            toast.error('Erro ao salvar venda no Supabase');
+          }
         }
       },
 

@@ -360,6 +360,20 @@ CREATE TABLE IF NOT EXISTS savings_goals (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- 26. Tabela de Vendas e Propostas (Sales)
+CREATE TABLE IF NOT EXISTS sales (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  client_id UUID REFERENCES clients(id) ON DELETE CASCADE,
+  date TIMESTAMP WITH TIME ZONE NOT NULL,
+  value DECIMAL(12, 2) NOT NULL,
+  description TEXT NOT NULL,
+  status TEXT NOT NULL CHECK (status IN ('PROPOSAL', 'SALE')),
+  area TEXT,
+  notes TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- 25. Tabela de Registros de Energia (Energy Records)
 CREATE TABLE IF NOT EXISTS energy_records (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
