@@ -981,7 +981,11 @@ export const useStore = create<AppState>()(
           }]);
           if (error) {
             console.error('Erro Supabase addChecklistItem:', error);
-            toast.error(`Erro ao salvar checklist: ${error.message}`);
+            if (error.code === '42P01') {
+              toast.error('Tabela "checklist_items" não encontrada no Supabase.');
+            } else {
+              toast.error(`Erro ao salvar checklist: ${error.message}`);
+            }
           } else {
             toast.success('Checklist salvo no Supabase!');
           }
@@ -1141,7 +1145,11 @@ export const useStore = create<AppState>()(
           }]);
           if (error) {
             console.error('Erro Supabase addQuote:', error);
-            toast.error(`Erro ao salvar orçamento: ${error.message}`);
+            if (error.code === '42P01') {
+              toast.error('Tabela "quotes" não encontrada no Supabase.');
+            } else {
+              toast.error(`Erro ao salvar orçamento: ${error.message}`);
+            }
           } else {
             toast.success('Orçamento salvo no Supabase!');
           }
@@ -1195,7 +1203,9 @@ export const useStore = create<AppState>()(
           }]);
           if (error) {
             console.error('Erro Supabase addReceipt:', error);
-            if (error.message === 'Failed to fetch') {
+            if (error.code === '42P01') {
+              toast.error('Tabela "receipts" não encontrada no Supabase.');
+            } else if (error.message === 'Failed to fetch') {
               toast.error('Erro de conexão com o Supabase. Verifique se a URL do projeto está correta e se o projeto não está pausado.');
             } else {
               toast.error(`Erro ao salvar recibo: ${error.message}`);
@@ -1251,7 +1261,9 @@ export const useStore = create<AppState>()(
           }]);
           if (error) {
             console.error('Erro Supabase addCost:', error);
-            if (error.message === 'Failed to fetch') {
+            if (error.code === '42P01') {
+              toast.error('Tabela "costs" não encontrada no Supabase.');
+            } else if (error.message === 'Failed to fetch') {
               toast.error('Erro de conexão com o Supabase. Verifique se a URL do projeto está correta e se o projeto não está pausado.');
             } else {
               toast.error(`Erro ao salvar custo: ${error.message}`);
@@ -1317,7 +1329,9 @@ export const useStore = create<AppState>()(
           }]);
           if (error) {
             console.error('Erro Supabase addAppointment:', error);
-            if (error.message === 'Failed to fetch') {
+            if (error.code === '42P01') {
+              toast.error('Tabela "appointments" não encontrada no Supabase.');
+            } else if (error.message === 'Failed to fetch') {
               toast.error('Erro de conexão com o Supabase. Verifique se a URL do projeto está correta e se o projeto não está pausado.');
             } else {
               toast.error(`Erro ao salvar compromisso: ${error.message}`);
@@ -1376,7 +1390,11 @@ export const useStore = create<AppState>()(
           }]);
           if (error) {
             console.error('Erro Supabase addProduct:', error);
-            toast.error(`Erro ao salvar produto: ${error.message}`);
+            if (error.code === '42P01') {
+              toast.error('Tabela "products" não encontrada no Supabase.');
+            } else {
+              toast.error(`Erro ao salvar produto: ${error.message}`);
+            }
           } else {
             toast.success('Produto salvo no Supabase!');
           }
@@ -1450,7 +1468,11 @@ export const useStore = create<AppState>()(
           }]);
           if (error) {
             console.error('Erro Supabase addSupplier:', error);
-            toast.error(`Erro ao salvar fornecedor: ${error.message}`);
+            if (error.code === '42P01') {
+              toast.error('Tabela "suppliers" não encontrada no Supabase.');
+            } else {
+              toast.error(`Erro ao salvar fornecedor: ${error.message}`);
+            }
           } else {
             toast.success('Fornecedor salvo no Supabase!');
           }
@@ -1508,7 +1530,11 @@ export const useStore = create<AppState>()(
           }]);
           if (error) {
             console.error('Erro Supabase addSupplyItem:', error);
-            toast.error(`Erro ao salvar item de suprimento: ${error.message}`);
+            if (error.code === '42P01') {
+              toast.error('Tabela "supply_items" não encontrada no Supabase.');
+            } else {
+              toast.error(`Erro ao salvar item de suprimento: ${error.message}`);
+            }
           } else {
             toast.success('Item de suprimento salvo no Supabase!');
           }
@@ -1637,7 +1663,11 @@ export const useStore = create<AppState>()(
           }]);
           if (error) {
             console.error('Erro Supabase addPayment:', error);
-            toast.error(`Erro ao salvar pagamento: ${error.message}`);
+            if (error.code === '42P01') {
+              toast.error('Tabela "payments" não encontrada no Supabase.');
+            } else {
+              toast.error(`Erro ao salvar pagamento: ${error.message}`);
+            }
           } else {
             toast.success('Pagamento salvo no Supabase!');
           }
@@ -1687,7 +1717,11 @@ export const useStore = create<AppState>()(
           }]);
           if (error) {
             console.error('Erro Supabase addLegalAgreement:', error);
-            toast.error(`Erro ao salvar acordo: ${error.message}`);
+            if (error.code === '42P01') {
+              toast.error('Tabela "legal_agreements" não encontrada no Supabase.');
+            } else {
+              toast.error(`Erro ao salvar acordo: ${error.message}`);
+            }
           } else {
             toast.success('Acordo jurídico salvo no Supabase!');
           }
@@ -1973,7 +2007,11 @@ export const useStore = create<AppState>()(
           }]);
           if (error) {
             console.error('Erro Supabase addScheduledMaintenance:', error);
-            toast.error(`Erro ao salvar manutenção: ${error.message}`);
+            if (error.code === '42P01') {
+              toast.error('Tabela "scheduled_maintenances" não encontrada no Supabase.');
+            } else {
+              toast.error(`Erro ao salvar manutenção: ${error.message}`);
+            }
           } else {
             toast.success('Manutenção agendada salva no Supabase!');
           }
@@ -2061,7 +2099,7 @@ export const useStore = create<AppState>()(
         }));
 
         try {
-          await supabase.from('notifications').insert([{
+          const { error } = await supabase.from('notifications').insert([{
             id,
             title: notif.title,
             message: notif.message,
@@ -2069,6 +2107,9 @@ export const useStore = create<AppState>()(
             date: newNotif.date,
             read: false
           }]);
+          if (error && error.code === '42P01') {
+            console.warn('Tabela "notifications" não encontrada no Supabase.');
+          }
         } catch (e) { console.error(e); }
       },
       markNotificationAsRead: async (id) => {
@@ -2106,7 +2147,11 @@ export const useStore = create<AppState>()(
           }]);
           if (error) {
             console.error('Erro Supabase addConsumptionReading:', error);
-            toast.error(`Erro ao salvar leitura: ${error.message}`);
+            if (error.code === '42P01') {
+              toast.error('Tabela "consumption_readings" não encontrada no Supabase.');
+            } else {
+              toast.error(`Erro ao salvar leitura: ${error.message}`);
+            }
           } else {
             toast.success('Leitura de consumo salva no Supabase!');
           }
@@ -2437,7 +2482,11 @@ export const useStore = create<AppState>()(
           }]);
           if (error) {
             console.error('Erro Supabase addVisitor:', error);
-            toast.error(`Erro ao salvar visitante: ${error.message}`);
+            if (error.code === '42P01') {
+              toast.error('Tabela "visitors" não encontrada no Supabase.');
+            } else {
+              toast.error(`Erro ao salvar visitante: ${error.message}`);
+            }
           } else {
             toast.success('Visitante salvo no Supabase!');
           }
@@ -2512,7 +2561,11 @@ export const useStore = create<AppState>()(
           }).eq('id', ticketId);
           if (error) {
             console.error('Erro Supabase addTicketHistory:', error);
-            toast.error('Erro ao salvar histórico no servidor');
+            if (error.code === '42P01') {
+              toast.error('Tabela "tickets" não encontrada no Supabase.');
+            } else {
+              toast.error('Erro ao salvar histórico no servidor');
+            }
           } else {
             toast.success('Histórico atualizado');
           }
